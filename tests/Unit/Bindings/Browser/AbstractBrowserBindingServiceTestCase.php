@@ -12,14 +12,17 @@ namespace Dkd\PhpCmis\Test\Unit\Bindings\Browser;
 
 use Dkd\PhpCmis\Bindings\BindingSessionInterface;
 use Dkd\PhpCmis\SessionParameter;
+use Dkd\PhpCmis\Test\Unit\FixtureHelperTrait;
 use Dkd\PhpCmis\Test\Unit\ReflectionHelperTrait;
 use PHPUnit_Framework_MockObject_MockObject;
 
 abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_TestCase
 {
     use ReflectionHelperTrait;
+    use FixtureHelperTrait;
 
     const BROWSER_URL_TEST = 'http://foo.bar.baz';
+    const TYPE_DEFINITION_CACHE_CLASS = 'http://foo.bar.baz';
 
     /**
      * Returns a mock of a BindingSessionInterface
@@ -31,7 +34,8 @@ abstract class AbstractBrowserBindingServiceTestCase extends \PHPUnit_Framework_
     {
         $map = array(
             array(SessionParameter::BROWSER_SUCCINCT, null, false),
-            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST)
+            array(SessionParameter::BROWSER_URL, null, self::BROWSER_URL_TEST),
+            array(SessionParameter::TYPE_DEFINITION_CACHE_CLASS, null, '\\Doctrine\\Common\\Cache\\ArrayCache')
         );
 
         $map = array_merge($sessionParameterMap, $map);

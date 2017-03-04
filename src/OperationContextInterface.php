@@ -49,7 +49,7 @@ interface OperationContextInterface
     /**
      * Returns the current max number of items per batch.
      *
-     * @return int
+     * @return integer
      */
     public function getMaxItemsPerPage();
 
@@ -134,8 +134,8 @@ interface OperationContextInterface
     /**
      * Sets the current filter.
      *
-     * @param string $propertyFilter a comma separated string of query names or "*" for all properties or null
-     * to let the repository determine a set of properties
+     * @param string $propertyFilter a comma separated string of query names or "*" for all properties or
+     *      <code>null</code> to let the repository determine a set of properties
      */
     public function setFilterString($propertyFilter);
 
@@ -184,7 +184,7 @@ interface OperationContextInterface
     /**
      * Set the max number of items per batch for operations that return lists.
      *
-     * @param int $maxItemsPerPage max number of items (must be >0)
+     * @param integer $maxItemsPerPage max number of items (must be >0)
      */
     public function setMaxItemsPerPage($maxItemsPerPage);
 

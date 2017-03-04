@@ -30,7 +30,7 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
      * and because when dealing with queries the proper key is usually the query name
      * (when using JOINs, several properties with the same ID may be returned).
      *
-     * @return PropertyDataInterface[] the map of properties, not null
+     * @return PropertyDataInterface[] the map of properties, not <code>null</code>
      */
     public function getProperties()
     {
@@ -45,6 +45,18 @@ class Properties extends AbstractExtensionData implements PropertiesInterface
     public function addProperty(PropertyDataInterface $property)
     {
         $this->properties[$property->getId()] = $property;
+    }
+
+    /**
+     * Adds a list of properties with propertyId as index. Existing property with same id will be replaced.
+     *
+     * @param PropertyDataInterface[] $properties
+     */
+    public function addProperties(array $properties)
+    {
+        foreach ($properties as $property) {
+            $this->addProperty($property);
+        }
     }
 
     /**

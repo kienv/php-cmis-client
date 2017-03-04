@@ -24,11 +24,13 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->subjectUnderTest = new PropertyString();
+        $this->subjectUnderTest = new PropertyString('testId');
     }
 
     /**
-     * @dataProvider StringCastDataProvider
+     * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetValuesSetsProperty($expected, $value)
     {
@@ -38,14 +40,16 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
 
         $values = array('foo', $value, null);
         if (!is_string($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
         $this->subjectUnderTest->setValues($values);
         $this->assertAttributeSame(array('foo', $expected, null), 'values', $this->subjectUnderTest);
     }
 
     /**
-     * @dataProvider StringCastDataProvider
+     * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testSetValueSetsValuesProperty($expected, $value)
     {
@@ -54,7 +58,7 @@ class PropertyStringTest extends \PHPUnit_Framework_TestCase
         }
 
         if (!is_string($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
         $this->subjectUnderTest->setValue($value);
         $this->assertAttributeSame(array($expected), 'values', $this->subjectUnderTest);

@@ -10,7 +10,7 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
-use Dkd\PhpCmis\DataObjects\Repository;
+use Dkd\PhpCmis\DataObjects\RepositoryInfo;
 use Doctrine\Common\Cache\Cache;
 
 /**
@@ -23,9 +23,9 @@ interface SessionFactoryInterface
      *
      * @param string[] $parameters a array of name/value pairs with parameters for the session, see
      *            {@link SessionParameter} for parameters supported by php cmis lib
-     * @param ObjectFactoryInterface $objectFactory
-     * @param Cache $cache
-     * @param Cache $typeDefinitionCache
+     * @param ObjectFactoryInterface|null $objectFactory
+     * @param Cache|null $cache
+     * @param Cache|null $typeDefinitionCache
      * @return SessionInterface a {@link SessionInterface} connected to the CMIS repository
      *
      * @see SessionParameter
@@ -44,10 +44,10 @@ interface SessionFactoryInterface
      *            {@link SessionParameter} for parameters supported by php cmis lib, the parameter
      *            {@link SessionParameter::REPOSITORY_ID} should not be set
      *
-     * @param ObjectFactoryInterface $objectFactory
-     * @param Cache $cache
-     * @param Cache $typeDefinitionCache
-     * @return Repository[] a list of all available repositories
+     * @param ObjectFactoryInterface|null $objectFactory
+     * @param Cache|null $cache
+     * @param Cache|null $typeDefinitionCache
+     * @return RepositoryInfo[] a list of all available repositories
      *
      * @see org.apache.chemistry.opencmis.commons.SessionParameter
      */

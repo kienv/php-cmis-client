@@ -22,12 +22,12 @@ class RepositoryUrlCache
     /**
      * @var array
      */
-    protected $repositoryUrls;
+    protected $repositoryUrls = array();
 
     /**
      * @var array
      */
-    protected $rootUrls;
+    protected $rootUrls = array();
 
     /**
      * Adds the URLs of a repository to the cache.
@@ -35,7 +35,6 @@ class RepositoryUrlCache
      * @param string $repositoryId
      * @param string $repositoryUrl
      * @param string $rootUrl
-     * @return void
      */
     public function addRepository($repositoryId, $repositoryUrl, $rootUrl)
     {
@@ -74,7 +73,7 @@ class RepositoryUrlCache
      * Returns the repository URL of a repository.
      *
      * @param string $repositoryId
-     * @param string $selector add optional cmis selector parameter
+     * @param string|null $selector add optional cmis selector parameter
      * @return Url|null
      */
     public function getRepositoryUrl($repositoryId, $selector = null)
@@ -108,7 +107,7 @@ class RepositoryUrlCache
      *
      * @param string $repositoryId
      * @param string $objectId
-     * @param string $selector
+     * @param string|null $selector
      * @return Url|null
      */
     public function getObjectUrl($repositoryId, $objectId, $selector = null)
@@ -133,7 +132,7 @@ class RepositoryUrlCache
      *
      * @param string $repositoryId
      * @param string $path
-     * @param string $selector
+     * @param string|null $selector
      * @return Url
      */
     public function getPathUrl($repositoryId, $path, $selector = null)

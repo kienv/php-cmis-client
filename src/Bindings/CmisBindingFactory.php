@@ -23,7 +23,7 @@ class CmisBindingFactory
      * Create a browser binding
      *
      * @param array $sessionParameters
-     * @param Cache $typeDefinitionCache
+     * @param Cache|null $typeDefinitionCache
      * @return CmisBinding
      */
     public function createCmisBrowserBinding(
@@ -70,6 +70,9 @@ class CmisBindingFactory
         if (!isset($sessionParameters[SessionParameter::JSON_CONVERTER_CLASS])) {
             $sessionParameters[SessionParameter::JSON_CONVERTER_CLASS] = '\\Dkd\\PhpCmis\\Converter\\JsonConverter';
         }
+        if (!isset($sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS])) {
+            $sessionParameters[SessionParameter::TYPE_DEFINITION_CACHE_CLASS] = '\\Doctrine\\Common\\Cache\\ArrayCache';
+        }
     }
 
     /**
@@ -78,7 +81,8 @@ class CmisBindingFactory
      *
      * @param array $sessionParameters
      * @param string $parameter
-     * @return bool
+     * @throws CmisInvalidArgumentException
+     * @return boolean
      */
     protected function check(array $sessionParameters, $parameter)
     {

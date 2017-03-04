@@ -24,11 +24,13 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyInteger = new PropertyInteger();
+        $this->propertyInteger = new PropertyInteger('testId');
     }
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetValuesSetsProperty($expected, $value)
     {
@@ -36,8 +38,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
 
         $this->propertyInteger->setValues(array($value));
@@ -46,6 +48,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider integerCastDataProvider
+     * @param integer $expected
+     * @param mixed $value
      */
     public function testSetValueSetsValuesProperty($expected, $value)
     {
@@ -53,8 +57,8 @@ class PropertyIntegerTest extends \PHPUnit_Framework_TestCase
             $expected = $value;
         }
 
-        if (!is_integer($value) && $value !== null) {
-            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        if (!is_integer($value) && $value !== null && !(PHP_INT_SIZE == 4 && is_double($value))) {
+            $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         }
 
         $this->propertyInteger->setValue($value);

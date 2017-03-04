@@ -11,10 +11,12 @@ namespace Dkd\PhpCmis\Bindings;
  */
 
 use Dkd\Enumeration\Exception\InvalidEnumerationValueException;
+use Dkd\PhpCmis\Converter\JsonConverter;
 use Dkd\PhpCmis\Enum\BindingType;
 use Dkd\PhpCmis\Exception\CmisInvalidArgumentException;
 use Dkd\PhpCmis\Exception\CmisRuntimeException;
 use Dkd\PhpCmis\SessionParameter;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * A collection of methods that are used in multiple places within the
@@ -27,12 +29,12 @@ class CmisBindingsHelper
 
     /**
      * @param array $parameters
-     * @param \Doctrine\Common\Cache\Cache $typeDefinitionCache
+     * @param Cache|null $typeDefinitionCache
      * @return CmisBindingInterface
      */
     public function createBinding(
         array $parameters,
-        \Doctrine\Common\Cache\Cache $typeDefinitionCache = null
+        Cache $typeDefinitionCache = null
     ) {
         if (count($parameters) === 0) {
             throw new CmisRuntimeException('Session parameters must be set!');
@@ -167,6 +169,10 @@ class CmisBindingsHelper
         return $invoker;
     }
 
+    /**
+     * @param BindingSessionInterface $session
+     * @return JsonConverter
+     */
     public function getJsonConverter(BindingSessionInterface $session)
     {
         $jsonConverter = $session->get(SessionParameter::JSON_CONVERTER);
@@ -204,5 +210,34 @@ class CmisBindingsHelper
     protected function getCmisBindingFactory()
     {
         return new CmisBindingFactory();
+    }
+
+    /**
+     * Returns the type definition cache from the session.
+     *
+     * @param BindingSessionInterface $session
+     * @return Cache
+     * @throws CmisRuntimeException Exception is thrown if cache instance could not be initialized.
+     */
+    public function getTypeDefinitionCache(BindingSessionInterface $session)
+    {
+        $cache = $session->get(self::TYPE_DEFINITION_CACHE);
+        if ($cache !== null) {
+            return $cache;
+        }
+
+        $className = $session->get(SessionParameter::TYPE_DEFINITION_CACHE_CLASS);
+        try {
+            $cache = new $className();
+        } catch (\Exception $exception) {
+            throw new CmisRuntimeException(
+                sprintf('Could not create object of type "%s"!', $className),
+                null,
+                $exception
+            );
+        }
+        $session->put(self::TYPE_DEFINITION_CACHE, $cache);
+
+        return $cache;
     }
 }

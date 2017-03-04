@@ -24,7 +24,7 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->propertyDateTime = new PropertyDateTime();
+        $this->propertyDateTime = new PropertyDateTime('testId');
     }
 
     public function testSetValuesSetsProperty()
@@ -36,7 +36,7 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValuesThrowsExceptionIfInvalidValuesGiven()
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         $this->propertyDateTime->setValues(array('now'));
     }
 
@@ -49,7 +49,7 @@ class PropertyDateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValueThrowsExceptionIfInvalidValueGiven()
     {
-        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', null, 1413440336);
+        $this->setExpectedException('\\Dkd\\PhpCmis\\Exception\\CmisInvalidArgumentException', '', 1413440336);
         $this->propertyDateTime->setValue('now');
     }
 }

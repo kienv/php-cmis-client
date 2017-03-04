@@ -10,6 +10,8 @@ namespace Dkd\PhpCmis;
  * file that was distributed with this source code.
  */
 
+use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\ObjectTypeInterface;
 use Dkd\PhpCmis\Definitions\PropertyDefinitionInterface;
 
 /**
@@ -20,9 +22,9 @@ interface QueryStatementInterface
     /**
      * Executes the query.
      *
-     * @param boolean $searchAllVersions  true if all document versions should be included in the search results,
-     * false if only the latest document versions should be included in the search results
-     * @param OperationContextInterface $context the operation context to use
+     * @param boolean $searchAllVersions <code>true</code> if all document versions should be included in the search
+     *      results, <code>false</code> if only the latest document versions should be included in the search results
+     * @param OperationContextInterface|null $context the operation context to use
      * @return QueryResultInterface[]
      */
     public function query($searchAllVersions, OperationContextInterface $context = null);
@@ -30,63 +32,56 @@ interface QueryStatementInterface
     /**
      * Sets the designated parameter to the given boolean.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param boolean $bool the boolean
-     * @return void
      */
     public function setBoolean($parameterIndex, $bool);
 
     /**
      * Sets the designated parameter to the given DateTime value.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @return void
      */
-    public function setDateTime($parameterIndex, $dateTime);
+    public function setDateTime($parameterIndex, \DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given DateTime value with the prefix 'TIMESTAMP '.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param \DateTime $dateTime the DateTime value as DateTime object
-     * @return void
      */
-    public function setDateTimeTimestamp($parameterIndex, $dateTime);
+    public function setDateTimeTimestamp($parameterIndex, \DateTime $dateTime);
 
     /**
      * Sets the designated parameter to the given object ID.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectIdInterface $id the object ID
-     * @return void
      */
     public function setId($parameterIndex, ObjectIdInterface $id);
 
     /**
      * Sets the designated parameter to the given number.
      *
-     * @param int $parameterIndex the parameter index (one-based)
-     * @param int $number the number
-     * @return void
+     * @param integer $parameterIndex the parameter index (one-based)
+     * @param integer $number the value to be set as number
      */
     public function setNumber($parameterIndex, $number);
 
     /**
      * Sets the designated parameter to the query name of the given property.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param PropertyDefinitionInterface $propertyDefinition
-     * @return void
      */
     public function setProperty($parameterIndex, PropertyDefinitionInterface $propertyDefinition);
 
     /**
      * Sets the designated parameter to the given string.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the string
-     * @return void
      */
     public function setString($parameterIndex, $string);
 
@@ -114,9 +109,8 @@ interface QueryStatementInterface
      * ' --> \' --> \\\'
      * " --> \" --> \\\"
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param string $string the CONTAINS string
-     * @return void
      */
     public function setStringContains($parameterIndex, $string);
 
@@ -124,38 +118,18 @@ interface QueryStatementInterface
      * Sets the designated parameter to the given string.
      * It does not escape backslashes ('\') in front of '%' and '_'.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param $string
-     * @return void
      */
     public function setStringLike($parameterIndex, $string);
 
     /**
      * Sets the designated parameter to the query name of the given type.
      *
-     * @param int $parameterIndex the parameter index (one-based)
+     * @param integer $parameterIndex the parameter index (one-based)
      * @param ObjectTypeInterface $type the object type
-     * @return void
      */
     public function setType($parameterIndex, ObjectTypeInterface $type);
-
-    /**
-     * Sets the designated parameter to the given URI.
-     *
-     * @param int $parameterIndex the parameter index (one-based)
-     * @param string $uri the URI
-     * @return void
-     */
-    public function setUri($parameterIndex, $uri);
-
-    /**
-     * Sets the designated parameter to the given URL.
-     *
-     * @param int $parameterIndex the parameter index (one-based)
-     * @param string $url the URL
-     * @return mixed
-     */
-    public function setUrl($parameterIndex, $url);
 
     /**
      * Returns the query statement.

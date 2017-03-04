@@ -44,7 +44,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * @var RenditionDataInterface[]
      */
-    protected $renditions;
+    protected $renditions = array();
 
     /**
      * @var PolicyIdListInterface
@@ -62,7 +62,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     protected $acl;
 
     /**
-     * @var bool
+     * @var boolean|null
      */
     protected $isExactAcl;
 
@@ -125,7 +125,8 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * Returns if the access control list reflects the exact permission set in the repository.
      *
-     * @return boolean|null true - exact; false - not exact, other permission constraints exist; null - unknown
+     * @return boolean|null <code>true</code> - exact; <code>false</code> - not exact, other permission constraints
+     *      exist; <code>null</code> - unknown
      */
     public function isExactAcl()
     {
@@ -149,7 +150,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     }
 
     /**
-     * @return PropertiesInterface
+     * @return PropertiesInterface|null
      */
     public function getProperties()
     {
@@ -202,7 +203,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * Returns the base object type.
      *
-     * @return BaseTypeId|null the base object type or null if the base object type is unknown
+     * @return BaseTypeId|null the base object type or <code>null</code> if the base object type is unknown
      */
     public function getBaseTypeId()
     {
@@ -221,7 +222,7 @@ class ObjectData extends AbstractExtensionData implements ObjectDataInterface
     /**
      * Returns the object ID.
      *
-     * @return string|null the object ID or null if the object ID is unknown
+     * @return string|null the object ID or <code>null</code> if the object ID is unknown
      */
     public function getId()
     {

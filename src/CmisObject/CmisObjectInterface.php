@@ -13,14 +13,14 @@ namespace Dkd\PhpCmis\CmisObject;
 use Dkd\PhpCmis\Data\AceInterface;
 use Dkd\PhpCmis\Data\AclInterface;
 use Dkd\PhpCmis\Data\AllowableActionsInterface;
-use Dkd\PhpCmis\Data\CmisExtensionElementInterface;
+use Dkd\PhpCmis\Data\ObjectIdInterface;
+use Dkd\PhpCmis\Data\PolicyInterface;
+use Dkd\PhpCmis\Data\RelationshipInterface;
+use Dkd\PhpCmis\Data\RenditionInterface;
 use Dkd\PhpCmis\Enum\AclPropagation;
 use Dkd\PhpCmis\Enum\ExtensionLevel;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
-use Dkd\PhpCmis\ObjectIdInterface;
-use Dkd\PhpCmis\PolicyInterface;
-use Dkd\PhpCmis\RelationshipInterface;
-use Dkd\PhpCmis\RenditionInterface;
+use Dkd\PhpCmis\Exception\IllegalStateException;
 
 /**
  * Base interface for all CMIS objects.
@@ -31,7 +31,7 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * Adds ACEs to the object and refreshes this object afterwards.
      * @param AceInterface[] $addAces
      * @param AclPropagation $aclPropagation
-     * @return AclInterface
+     * @return AclInterface the new ACL of this object
      */
     public function addAcl(array $addAces, AclPropagation $aclPropagation);
 
@@ -41,53 +41,42 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * @param AceInterface[] $addAces
      * @param AceInterface[] $removeAces
      * @param AclPropagation $aclPropagation
-     * @return AclInterface
+     * @return AclInterface the new ACL of this object
      */
     public function applyAcl(array $addAces, array $removeAces, AclPropagation $aclPropagation);
 
     /**
      * Applies the provided policies and refreshes this object afterwards.
      * @param ObjectIdInterface[] $policyIds
-     * @return void
      */
-    public function applyPolicy(array $policyIds);
+    public function applyPolicies(array $policyIds);
 
     /**
      * Deletes this object
      * @param boolean $allVersions if this object is a document this parameter defines whether only this
-     * version (false) or all versions (true ) should be deleted, the parameter is ignored for all other object types
-     * @return void
+     *      version (<code>false</code>) or all versions (<code>true</code>) should be deleted, the parameter is
+     *      ignored for all other object types
      */
     public function delete($allVersions);
 
     /**
      * Returns the ACL if it has been fetched for this object.
      *
-     * @return AclInterface
+     * @return AclInterface|null
      */
     public function getAcl();
 
     /**
-     * Returns an adapter based on the given interface.
-     *
-     * @TODO check that to do here
-     *
-     * @param mixed $adapterInterface
-     * @return mixed an adapter object or null if no adapter object could be created
-     */
-    public function getAdapter($adapterInterface);
-
-    /**
      * Returns the allowable actions if they have been fetched for this object.
      *
-     * @return AllowableActionsInterface[]
+     * @return AllowableActionsInterface|null
      */
     public function getAllowableActions();
 
     /**
      * Returns the extensions for the given level.
      * @param ExtensionLevel $level the level
-     * @return CmisExtensionElementInterface[] the extensions at that level or null if there no extensions
+     * @return array[] A list of CmisExtensionElementInterface at that level or <code>null</code> if there no extensions
      */
     public function getExtensions(ExtensionLevel $level);
 
@@ -123,7 +112,6 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Reloads this object from the repository.
      *
-     * @return void
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
     public function refresh();
@@ -131,26 +119,24 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
     /**
      * Reloads the data from the repository if the last refresh did not occur within durationInMillis.
      *
-     * @param int $durationInMillis
-     * @return void
+     * @param integer $durationInMillis
      * @throws CmisObjectNotFoundException - if the object doesn't exist anymore in the repository
      */
     public function refreshIfOld($durationInMillis);
 
     /**
-     * Removes ACEs to the object and refreshes this object afterwards.
+     * Removes ACEs from the object and refreshes this object afterwards.
      *
-     * @param $removeAces
+     * @param array $removeAces
      * @param AclPropagation $aclPropagation
      * @return AclInterface the new ACL of this object
      */
-    public function removeAcl($removeAces, AclPropagation $aclPropagation);
+    public function removeAcl(array $removeAces, AclPropagation $aclPropagation);
 
     /**
      * Removes the provided policies and refreshes this object afterwards.
      *
      * @param ObjectIdInterface[] $policyIds
-     * @return void
      */
     public function removePolicy(array $policyIds);
 
@@ -159,9 +145,11 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * If the repository created a new object, for example a new version, the object id of the
      * new object is returned. Otherwise the object id of the current object is returned.
      *
-     * @param string $newName the new name, not null or empty
-     * @param boolean $refresh true if this object should be refresh after the update, false if not
-     * @return CmisObjectInterface the updated object
+     * @param string $newName the new name, not <code>null</code> or empty
+     * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
+     *      <code>false</code> if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
+     *      of a repository failure
      */
     public function rename($newName, $refresh);
 
@@ -177,8 +165,19 @@ interface CmisObjectInterface extends ObjectIdInterface, CmisObjectPropertiesInt
      * the object ID of the new object is returned. Otherwise the object ID of the current object is returned.
      *
      * @param array $properties the properties to update
-     * @param $refresh true if this object should be refresh after the update, false if not
-     * @return ObjectIdInterface the object ID of the updated object
+     * @param boolean $refresh <code>true</code> if this object should be refresh after the update,
+     *      <code>false</code> if not
+     * @return CmisObjectInterface|null the object ID of the updated object - can return <code>null</code> in case
+     *     of a repository failure
      */
-    public function updateProperties(array $properties, $refresh);
+    public function updateProperties(array $properties, $refresh = true);
+
+    /**
+     * Returns all permissions for the given principal from the ACL.
+     *
+     * @param string $principalId the principal ID
+     * @return string[] the set of permissions for this user, or an empty set if principal is not in the ACL
+     * @throws IllegalStateException if the ACL hasn't been fetched or provided by the repository
+     */
+    public function getPermissionsForPrincipal($principalId);
 }

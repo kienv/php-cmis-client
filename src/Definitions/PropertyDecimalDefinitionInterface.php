@@ -18,23 +18,23 @@ use Dkd\PhpCmis\Enum\DecimalPrecision;
 interface PropertyDecimalDefinitionInterface extends PropertyDefinitionInterface
 {
     /**
-     * Returns the max value of this decimal.
+     * Returns the maximum value of this decimal.
      *
-     * @return float|null the max value or null if no limit is specified
+     * @return float|null the maximum value or <code>null</code> if no limit is specified
      */
     public function getMaxValue();
 
     /**
-     * Returns the min value of this decimal.
+     * Returns the minimum value of this decimal.
      *
-     * @return float|null the min value or null if no limit is specified
+     * @return float|null the minimum value or <code>null</code> if no limit is specified
      */
     public function getMinValue();
 
     /**
      * Returns the precision this decimal.
      *
-     * @return DecimalPrecision|null the precision or null if the decimal supports any value
+     * @return DecimalPrecision|null the precision or <code>null</code> if the decimal supports any value
      */
     public function getPrecision();
 }

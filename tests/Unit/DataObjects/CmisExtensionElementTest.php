@@ -32,17 +32,10 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
         new CmisExtensionElement('namespace', 'name', array(), 'value', array('children'));
     }
 
-    public function testConstructorThrowsExceptionIfNoValueAndChildrenGiven()
-    {
-        $this->setExpectedException(
-            '\\InvalidArgumentException',
-            'Value and children are empty! One of them is required.'
-        );
-        new CmisExtensionElement('namespace', 'name', array(), null);
-    }
-
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsNameAsProperty($expected, $value)
     {
@@ -55,6 +48,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsNamespaceAsProperty($expected, $value)
     {
@@ -70,6 +65,8 @@ class CmisExtensionElementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider stringCastDataProvider
+     * @param string $expected
+     * @param mixed $value
      */
     public function testConstructorSetsValueAsProperty($expected, $value)
     {
